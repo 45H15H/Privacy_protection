@@ -18,7 +18,7 @@ st.caption("Protecting Privacy")
 uploaded_file = st.file_uploader("Upload Image", accept_multiple_files=False)
 
 # choose between blur, pixelate and black rectangle
-option = st.selectbox("Choose the type of filter", ("Blur", "Pixelate", "Black Rectangle"))
+option = st.selectbox("Choose the type of filter", ("select","Blur", "Pixelate", "Black Rectangle"), index=0)
 
 # wait for the user to upload an image
 if uploaded_file is not None:
@@ -34,8 +34,12 @@ if uploaded_file is not None:
     # detect faces
     faces = face_cascade.detectMultiScale(gray_image, scaleFactor=1.05, minNeighbors=5, minSize=(40, 40))
 
+    # if no option is selected
+    if option == "select":
+        st.warning("Please select an option from the dropdown menu")
+
     # if blur is selected
-    if option == "Blur":
+    elif option == "Blur":
         # draw a rectangle around the face
         for (x, y, w, h) in faces:
             # draw a rectangle around the face
@@ -56,4 +60,16 @@ if uploaded_file is not None:
 
     if button == True:
         # display the output image
-        st.image(opencv_image, caption="Face Detection", use_column_width=True)
+        st.image(opencv_image, caption="masked face", use_column_width=True)
+        
+        # convert the image into RGB format
+        rgb_image = cv2.cvtColor(opencv_image, cv2.COLOR_BGR2RGB)
+        
+        cv2.imwrite("masked_face.jpg", rgb_image)
+
+        # success message
+        st.success("Image Generated Successfully")
+
+    # now download the image
+    st.download_button(label="Download", data=open("masked_face.jpg", "rb").read(), file_name="masked_face.jpg", mime="image/jpg")
+
