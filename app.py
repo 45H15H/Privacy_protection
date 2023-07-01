@@ -18,7 +18,7 @@ st.caption("Protecting Privacy")
 uploaded_file = st.file_uploader("Upload Image", accept_multiple_files=False)
 
 # choose between blur, pixelate and black rectangle
-option = st.selectbox("Choose the type of filter", ("select","Blur", "Pixelate", "Black Rectangle"), index=0)
+option = st.selectbox("Choose the type of filter", ("select","Blur", "Black Rectangle"), index=0)
 
 # wait for the user to upload an image
 if uploaded_file is not None:
